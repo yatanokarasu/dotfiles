@@ -1,0 +1,26 @@
+
+# bash foundation
+export EDITOR=vim
+export PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME:+$FUNCNAME(): }'
+
+# bash history
+export HISTCONTROL=ignoreboth
+export HISTIGNORE="fg*:bg*:history*:cd*"
+export HISTSIZE=10000
+export HISTTIMEFORMAT='%Y/%m/%d %T: '
+
+# Golang
+#export GOPATH="${HOME}/.go"
+#export PATH="${GOPATH}/bin:${PATH}"
+
+# NodeJS
+#export PATH="${PATH}:${HOME}/.npm_global:${HOME}/.npm_global/bin"
+
+# Terraform venv(tfenv)
+#export PATH="${PATH}:${HOME}/.npm_global:${HOME}/.npm_global/bin:${HOME}/.tfenv/bin"
+
+#export PATH="${PATH}:${tools}/consul"
+#export PATH="${PATH}:${tools}/vault"
+
+# Rust
+#export PATH="$HOME/.cargo/bin:$PATH"
