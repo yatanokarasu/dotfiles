@@ -14,4 +14,3 @@ alias adoc2="asciidoctor ${ASCIIDOCTOR_OPTIONS} -a toc2"
 #alias adoc3="asciidoctor -b pdf -d book -a toc2 -r asciidoctor-rouge -a source-highlighter=rouge -a rouge-theme=monokai"
 alias adocpdf="asciidoctor-pdf -b pdf -d book -a toc -a source-highlighter=coderay -r asciidoctor-diagram"
 alias adocpdf="asciidoctor -b pdf -d book -a toc2 -r asciidoctor-rouge -a source-highlighter=rouge -a rouge-theme=monokai"
-

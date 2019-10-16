@@ -20,21 +20,21 @@ fi
 
 
 # load utility functions if it exists
-if [[ -e ~/.bash_function ]]; then
-    source ~/.bash_function
+if [[ -f ~/.bash_functions ]]; then
+    . ~/.bash_functions
 fi
 
 # load bash powerline if it exists
-if [[ -e ~/.bash_powerline.sh ]]; then
-    source ~/.bash_powerline.sh
-    pl-disable k8s
+if [[ -f ~/.bash_powerline.sh ]]; then
+    . ~/.bash_powerline.sh
 fi
 
 # load bash variables if it exists
-if [[ -e ~/.bash_variables ]]; then
-    source ~/.bash_variables
+if [[ -f ~/.bash_variables ]]; then
+    . ~/.bash_variables
 fi
 
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="/home/yusuke/.sdkman"
-[[ -s "/home/yusuke/.sdkman/bin/sdkman-init.sh" ]] && source "/home/yusuke/.sdkman/bin/sdkman-init.sh"
+# load additional scripts
+if [[ -f ~/.bash_additionals ]]; then
+    . ~/.bash_additionals
+fi

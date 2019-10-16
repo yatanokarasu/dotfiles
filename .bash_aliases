@@ -1,3 +1,4 @@
+#!/bin/bash
 
 if [ -d ~/.aliases ]; then
     for a in $(ls -1 ~/.aliases/*); do
@@ -6,4 +7,3 @@ if [ -d ~/.aliases ]; then
         fi
     done
 fi
-

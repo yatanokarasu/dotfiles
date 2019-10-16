@@ -19,4 +19,3 @@ alias jpgrep="grep -P '\p{Hiragana}|\p{Katakana}|\p{Han}'"
 alias yaml2json="python -c 'import sys, json, yaml; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)'"
 alias csv2json="python -c 'import sys, csv, json; rows=[l for l in csv.DictReader(sys.stdin)]; json.dump(rows, sys.stdout, indent=4)'"
 alias xml2csv="python -c \"import xml.etree.ElementTree as ET; import sys; sys.exit('No argument as XPath\n\nUsage:\n\txml2csv <xpath> <<xmlfile>\n\t  or\n\tcat <xmlfile> | xml2csv <xpath>') if len(sys.argv)!=2 else [print(','.join([r.text for r in row])) for row in ET.parse(sys.stdin).getroot().findall(f'./{sys.argv[1]}')]\""
-

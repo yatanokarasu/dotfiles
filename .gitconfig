@@ -4,14 +4,12 @@
 [http]
     postBuffer = 524288000
     sslverify = false
-[https]
-    sslverify = false
 [color]
     ui = auto
-#[url "https://"]
-#    insteadof = git://
 [core]
-    autoCRLF = false
+    autocrlf = input
+    editor = vi
+    ignoreCase = false
 [filter "lfs"]
     required = true
     clean = git-lfs clean -- %f
@@ -20,3 +18,4 @@
 [alias]
     logtree = log --graph --all --format=\"%>|(12)%C(yellow bold)(%h)%C(reset) | %<(64,trunc)%s %C(dim bold)(%>(15)%cr)%C(reset) %C(magenta)%<(14,trunc)<%aN>%C(reset) |%C(auto)%d%C(reset)\"
     undo = "!f() { git reset --hard $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; }; f"
+    ignore = "!gi() { curl -skL https://www.gitignore.io/api/$@ ;}; gi"

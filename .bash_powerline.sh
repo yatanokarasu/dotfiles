@@ -35,7 +35,7 @@ declare -A __BASH_PL_MODULE_COLORS=(
     [python]="Olive;DodgerBlue1;Bold"
     [rodir]="White;Red3;Bold"
     [terraform]="White;SlateBlue1;Bold"
-    [time]="Fuchsia;Grey19;Bold"
+    [time]="Grey74;Grey19;Bold"
     [user]="Green;Grey23;Bold"
 
     # DO NOT MODIFY
@@ -586,48 +586,48 @@ declare -A __BASH_PL_SYMBOLS=(
     [fill_separator]=""    # U+E0B0
 
     # shell
-    [error]=" "            # U+F421
-    [locked]=" "           # U+E0A2
-    [background]=" "       # U+F110
+    [error]=""             # U+F421
+    [locked]=""            # U+E0A2
+    [background]=""        # U+F110
 
     # Env
-    [aws]=" "              # U+F270
-    [docker]=" "           # U+E308
-    [k8s]=" "              # U+E91B
-    [python]=" "           # U+E235
-    [terraform]=" "        # U+E740
+    [aws]=""               # U+F270
+    [docker]=""            # U+E308
+    [k8s]=""               # U+E91B
+    [python]=""            # U+E235
+    [terraform]=""         # U+E740
 
     # Git
-    [octcat]="  "          # U+F408
-    [git_staged]=" "       # U+F440
-    [git_modified]=" "     # U+F448
-    [git_untracked]=" "    # U+F420
-    [git_behind]=" "       # U+F409
-    [git_ahead]=" "        # U+F40A
-    [git_tag]=" "          # U+F412
-    [git_stash]=" "        # U+F487
-    [git_conflict]=" "     # U+F46E
-    [git_branch]=" "       # U+F418
-    [git_commit]=" "       # U+F417
-    [git_merge]=" "        # U+F407
-    [git_rebase]=" "       # U+F419
-    [git_patch]=" "        # U+F47F
-    [git_cherry]=" "       # U+E29B
-    [git_revert]=" "       # U+F4A8
-    [git_bisect]=" "       # U+F402
+    [octcat]=" "           # U+F408
+    [git_staged]=""        # U+F440
+    [git_modified]=""      # U+F448
+    [git_untracked]=""     # U+F420
+    [git_behind]=""        # U+F409
+    [git_ahead]=""         # U+F40A
+    [git_tag]=""           # U+F412
+    [git_stash]=""         # U+F487
+    [git_conflict]=""      # U+F46E
+    [git_branch]=""        # U+F418
+    [git_commit]=""        # U+F417
+    [git_merge]=""         # U+F407
+    [git_rebase]=""        # U+F419
+    [git_patch]=""         # U+F47F
+    [git_cherry]=""        # U+E29B
+    [git_revert]=""        # U+F4A8
+    [git_bisect]=""        # U+F402
 
     # Host
-    [win]=" "              # U+E70F
-    [ubuntu]=" "           # U+F31C
-    [redhat]=" "           # U+F316
-    [centos]=" "           # U+F304
+    [win]=""               # U+E70F
+    [ubuntu]=""            # U+F31C
+    [redhat]=""            # U+F316
+    [centos]=""            # U+F304
 
     # Common
-    [user]=" "             # U+F415
-    [home]=" "             # U+F46D
-    [dir]=" "              # U+F413
-    [time]=" "             # U+F43A
-    [tls]=" "              # U+F43D
+    [user]=""              # U+F415
+    [home]=""              # U+F46D
+    [dir]=""               # U+F413
+    [time]=""              # U+F43A
+    [tls]=""               # U+F43D
 
 
     ##################
@@ -639,7 +639,7 @@ declare -A __BASH_PL_SYMBOLS=(
     # shell
     [error_alt]="ErrorCode:"
     [locked_alt]="ReadOnly"
-    [background_alt]="BackGround:"
+    [background_alt]="Jobs:"
 
     # Env
     [aws_alt]="(AWS)"
@@ -668,10 +668,10 @@ declare -A __BASH_PL_SYMBOLS=(
     [git_bisect_alt]=""
 
     # Host
-    [win_alt]=""
-    [ubuntu_alt]=""
-    [redhat_alt]=""
-    [centos_alt]=""
+    [win_alt]="(Windows)"
+    [ubuntu_alt]="(Ubuntu)"
+    [redhat_alt]="(RHEL)"
+    [centos_alt]="(CentOS)"
 
     # Common
     [user_alt]=""
@@ -717,6 +717,7 @@ function __setup() {
 
     # For performance (DO NOT TOUCH)
     export __BASH_PL_K8S_CONTEXT
+    export __BASH_PL_K8S_CLUSTER
     export __BASH_PL_K8S_NAMESPACE
 
     PS1=""
@@ -811,14 +812,17 @@ function __module_newline() {
     PS1+="\n"
 }
 
+
 # --------------
 # AWS-profile module
 # --------------
 function __module_aws() {
+    [[ -z ${__BASH_PL_AWS_DISABLE} ]] || return 0
     [[ -z ${AWS_PROFILE} || ${AWS_PROFILE} = "default" ]] && return 0
 
     __append_prompt "${__BASH_PL_SYMBOLS[aws${__BASH_PL_SYMBOL_DISABLE:+_alt}]}${AWS_PROFILE}"
 }
+
 
 # --------------
 # Background jobs module
@@ -828,6 +832,7 @@ function __module_bgjobs() {
 
     __append_prompt "${__BASH_PL_SYMBOLS[background${__BASH_PL_SYMBOL_DISABLE:+_alt}]}${__number_bgjobs__}"
 }
+
 
 # --------------
 # CWD module
@@ -877,6 +882,7 @@ function __module_cwd() {
     __append_prompt "${_tmp_ps1}"
 }
 
+
 # --------------
 # Docker module
 # --------------
@@ -891,6 +897,7 @@ function __module_docker() {
     __append_prompt "${__BASH_PL_SYMBOLS[docker${__BASH_PL_SYMBOL_DISABLE:+_alt}]}${_tls_verify}${_docker_addr}${_docker_machine_name}"
 }
 
+
 # --------------
 # Prompt module
 # --------------
@@ -898,14 +905,16 @@ function __module_prompt() {
     __append_prompt "\\$"
 }
 
+
 # --------------
 # Error code module
 # --------------
 function __module_error() {
     [[ ${__return_code__} -eq 0 ]] && return 0
-    
+
     __append_prompt "${__BASH_PL_SYMBOLS[error${__BASH_PL_SYMBOL_DISABLE:+_alt}]}${__return_code__}"
 }
+
 
 # --------------
 # Git module
@@ -960,7 +969,7 @@ function __module_git() {
     if   [[ -d ${_git_dir}/rebase-merge ]]; then
             read _step _total _head \
                 <<<"$(< .git/rebase-merge/msgnum) $(< .git/rebase-merge/end) $(< .git/rebase-merge/head-name)"
-            
+
             if [[ -f ${_git_dir}/rebase-merge/interactive ]]; then
                 _rebase+="${__BASH_PL_SYMBOLS[git_rebase${__BASH_PL_SYMBOL_DISABLE:+_alt}]}REBASING(interactive)"
             else
@@ -1000,7 +1009,7 @@ function __module_git() {
         _branch="${__BASH_PL_FG_COLORS[Purple]}${__BASH_PL_SYMBOLS[git_branch${__BASH_PL_SYMBOL_DISABLE:+_alt}]}${_branch}"
         _branch+="${_hash:+${__BASH_PL_FG_COLORS[White]}(${__BASH_PL_FG_COLORS[Lime]}${__BASH_PL_SYMBOLS[git_commit${__BASH_PL_SYMBOL_DISABLE:+_alt}]}${_hash}${__BASH_PL_FG_COLORS[White]})}"
     fi
-    
+
     if [[ -n ${_step} && -n ${_total} ]]; then
         _rebase+=" ${_step}/${_total}"
     fi
@@ -1028,27 +1037,17 @@ function __module_git() {
     test "${__BASH_PL_GIT_NEWLINE,,}" = "true" && __module_newline
 }
 
+
 # --------------
 # k8s module
 # --------------
 function __module_k8s() {
     [[ -z ${__BASH_PL_K8S_DISABLE} ]] || return 0
-    [[ -n ${KUBECONFIG} ]] || return 0
+    [[ -z ${__BASH_PL_K8S_CONTEXT} || ${__BASH_PL_K8S_CONTEXT} = "default" ]] && return 0
 
-    if [[ -z ${__BASH_PL_K8S_CONTEXT} ]]; then
-        local _mark
-        local _context
-        local _cluster
-        local _authinfo
-        local _namespace
-
-        read _mark _context _cluster _authinfo _namespace <<<$(kubectl config get-contexts | sed -n '/^\*/ p')
-        __BASH_PL_K8S_CONTEXT=${_context}
-        __BASH_PL_K8S_NAMESPACE=${_namespace}
-    fi
-
-    __append_prompt "${__BASH_PL_SYMBOLS[k8s${__BASH_PL_SYMBOL_DISABLE:+_alt}]}${__BASH_PL_K8S_CONTEXT}${__BASH_PL_K8S_NAMESPACE:+ ${__BASH_PL_SYMBOLS[line_separator${__BASH_PL_SYMBOL_DISABLE:+_alt}]} ${__BASH_PL_K8S_NAMESPACE}}"
+    __append_prompt "${__BASH_PL_SYMBOLS[k8s${__BASH_PL_SYMBOL_DISABLE:+_alt}]}${__BASH_PL_K8S_CONTEXT}${__BASH_PL_K8S_NAMESPACE:+ ${__BASH_PL_SYMBOLS[line_separator${__BASH_PL_SYMBOL_DISABLE:+_alt}]} ${__BASH_PL_K8S_NAMESPACE}}${__BASH_PL_K8S_CLUSTER:+ ${__BASH_PL_SYMBOLS[line_separator${__BASH_PL_SYMBOL_DISABLE:+_alt}]} ${__BASH_PL_K8S_CLUSTER}}"
 }
+
 
 # --------------
 # Host module
@@ -1068,14 +1067,16 @@ function __module_host() {
     __append_prompt "${__BASH_PL_SYMBOLS[${_dist,,}${__BASH_PL_SYMBOL_DISABLE:+_alt}]}\h"
 }
 
+
 # --------------
 # ReadOnly dir module
 # --------------
 function __module_rodir() {
     [[ -w ${PWD} ]] && return 0
-    
+
     __append_prompt "${__BASH_PL_SYMBOLS[locked${__BASH_PL_SYMBOL_DISABLE:+_alt}]}"
 }
+
 
 # --------------
 # Python VENV module
@@ -1083,9 +1084,10 @@ function __module_rodir() {
 function __module_python() {
     [[ -z ${__BASH_PL_PYTHON_DISABLE} ]] || return 0
     [[ -z ${VIRTUAL_ENV} ]] && return 0
-    
+
     __append_prompt "${__BASH_PL_SYMBOLS[python${__BASH_PL_SYMBOL_DISABLE:+_alt}]}${VIRTUAL_ENV##*/}"
 }
+
 
 # --------------
 # Terraform module
@@ -1097,6 +1099,7 @@ function __module_terraform() {
     __append_prompt "${__BASH_PL_SYMBOLS[terraform${__BASH_PL_SYMBOL_DISABLE:+_alt}]}$(test -f ./.terraform/environment && cat ./.terraform/environment || echo default)"
 }
 
+
 # --------------
 # Time module
 # --------------
@@ -1104,10 +1107,15 @@ function __module_time() {
     __append_prompt "${__BASH_PL_SYMBOLS[time${__BASH_PL_SYMBOL_DISABLE:+_alt}]}\t"
 }
 
+
 # --------------
 # User module
 # --------------
 function __module_user() {
+    if [[ $(id -u) -eq 0 ]]; then
+        __BASH_PL_MODULE_COLORS[user]="Maroon;Grey23;Bold"
+    fi
+
     __append_prompt "${__BASH_PL_SYMBOLS[user${__BASH_PL_SYMBOL_DISABLE:+_alt}]}\u"
 }
 
@@ -1122,6 +1130,7 @@ function aws-profile() {
 
     export AWS_PROFILE=${profile_name}
 }
+
 
 function pl-dir-format() {
     case "${1,,}" in
@@ -1139,9 +1148,10 @@ Usage:
 __MSG__
         ;;
     esac
-    
+
     __BASH_PL_OLDPWD=""
 }
+
 
 function pl-enable() {
     unset eval "__BASH_PL_${1^^}_DISABLE"
@@ -1151,6 +1161,7 @@ function pl-enable() {
     fi
 }
 
+
 function pl-disable() {
     printf -v "__BASH_PL_${1^^}_DISABLE" "%s" "true"
 
@@ -1159,13 +1170,13 @@ function pl-disable() {
     fi
 }
 
+
 function kube-context() {
     local _tmp_mark
-    local _tmp_cluster
     local _tmp_auth
 
     kubectl config use-context ${1}
-    read _tmp_mark __BASH_PL_K8S_CONTEXT _tmp_cluster _tmp_auth __BASH_PL_K8S_NAMESPACE <<<$(kubectl config get-contexts | sed -n '/^\*/ p')
+    read _tmp_mark __BASH_PL_K8S_CONTEXT __BASH_PL_K8S_CLUSTER _tmp_auth __BASH_PL_K8S_NAMESPACE <<<$(kubectl config get-contexts | sed -n '/^\*/ p')
 }
 
 
