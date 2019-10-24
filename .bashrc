@@ -38,3 +38,6 @@ fi
 if [[ -f ~/.bash_additionals ]]; then
     . ~/.bash_additionals
 fi
+
+export PATH=${PATH}:.
+

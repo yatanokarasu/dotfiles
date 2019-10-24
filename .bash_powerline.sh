@@ -968,7 +968,7 @@ function __module_git() {
     local _head
     if   [[ -d ${_git_dir}/rebase-merge ]]; then
             read _step _total _head \
-                <<<"$(< .git/rebase-merge/msgnum) $(< .git/rebase-merge/end) $(< .git/rebase-merge/head-name)"
+                <<<"$(< ${_git_dir}/rebase-merge/msgnum) $(< ${_git_dir}/rebase-merge/end) $(< ${_git_dir}/rebase-merge/head-name)"
 
             if [[ -f ${_git_dir}/rebase-merge/interactive ]]; then
                 _rebase+="${__BASH_PL_SYMBOLS[git_rebase${__BASH_PL_SYMBOL_DISABLE:+_alt}]}REBASING(interactive)"
@@ -978,7 +978,7 @@ function __module_git() {
     else
         if [[ -d ${_git_dir}/rebase-apply ]]; then
             read _step _total _head \
-                <<<"$(< .git/rebase-apply/next) $(< .git/rebase-apply/last) $(< .git/rebase-apply/head-name)"
+                <<<"$(< ${_git_dir}/rebase-apply/next) $(< ${_git_dir}/rebase-apply/last) $(< ${_git_dir}/rebase-apply/head-name)"
 
             if   [[ -f ${_git_dir}/rebase-apply/rebasing ]]; then
                 _rebase+="${__BASH_PL_SYMBOLS[git_rebase${__BASH_PL_SYMBOL_DISABLE:+_alt}]}REBASING"
