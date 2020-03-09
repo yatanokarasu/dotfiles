@@ -639,7 +639,7 @@ declare -A __BASH_PL_SYMBOLS=(
     # shell
     [error_alt]="ErrorCode:"
     [locked_alt]="ReadOnly"
-    [background_alt]="Jobs:"
+    [background_alt]="BackGround:"
 
     # Env
     [aws_alt]="(AWS)"
@@ -842,7 +842,7 @@ function __module_cwd() {
 
     if [[ ${PWD} != ${__BASH_PL_OLDPWD} ]]; then
         local _pwd_dirs
-        local _pwd=${PWD//*?(Users|home)\/${USER}/\~}
+        local _pwd=${PWD//@(*Users|${HOME})/\~}
         _pwd=${_pwd// /___}
 
         test ${_pwd:0:1} = "~" \
@@ -1171,7 +1171,7 @@ function pl-disable() {
 }
 
 
-function kube-context() {
+function pl-kube-context() {
     local _tmp_mark
     local _tmp_auth
 
