@@ -19,3 +19,6 @@
     logtree = log --graph --all --format=\"%>|(12)%C(yellow bold)(%h)%C(reset) | %<(64,trunc)%s %C(dim bold)(%>(15)%cr)%C(reset) %C(magenta)%<(14,trunc)<%aN>%C(reset) |%C(auto)%d%C(reset)\"
     undo = "!f() { git reset --hard $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; }; f"
     ignore = "!gi() { curl -skL https://www.gitignore.io/api/$@ ;}; gi"
+[commit]
+    template = ~/.git_commit_template
+
