@@ -1,0 +1,26 @@
+# light line
+[[plugins]]
+repo = 'itchyny/lightline.vim'
+
+# indent line
+[[plugins]]
+repo = 'Yggdroot/indentLine'
+
+# alignment
+[[plugins]]
+repo = 'junegunn/vim-easy-align'
+
+# git, Gblame, etc.
+[[plugins]]
+repo = 'tpope/vim-fugitive'
+
+# git gutter
+[[plugins]]
+repo = 'airblade/vim-gitgutter'
+
+[[plugins]]
+repo = 'majutsushi/tagbar'
+
+# highlight trail space
+[[plugins]]
+repo = 'bronson/vim-trailing-whitespace'

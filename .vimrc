@@ -3,6 +3,7 @@ set title
 
 set list
 set number
+set relativenumber
 
 "---- status line ----
 set laststatus=2
