@@ -24,3 +24,7 @@ repo = 'majutsushi/tagbar'
 # highlight trail space
 [[plugins]]
 repo = 'bronson/vim-trailing-whitespace'
+
+[[plugins]]
+repo = 'scrooloose/nerdtree'
+
