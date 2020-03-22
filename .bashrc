@@ -34,6 +34,10 @@ if [[ -f ~/.bash_variables ]]; then
     . ~/.bash_variables
 fi
 
+if [[ -d ~/.local/bin ]]; then
+    export PATH=${HOME}/.local/bin:${PATH}
+fi
+
 # load additional scripts
 if [[ -f ~/.bash_additionals ]]; then
     . ~/.bash_additionals
