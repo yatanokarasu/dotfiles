@@ -1,6 +1,3 @@
-[user]
-    name = Yusuke TAKEI
-    email = sync.outerphase@gmail.com
 [http]
     postBuffer = 524288000
     sslverify = false
@@ -21,4 +18,3 @@
     ignore = "!gi() { curl -skL https://www.gitignore.io/api/$@ ;}; gi"
 [commit]
     template = ~/.git_commit_template
-
