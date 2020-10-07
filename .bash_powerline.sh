@@ -22,7 +22,7 @@ declare -A __BASH_PL_MODULE_COLORS=(
     #         Light**(above)
     #
     # - attr: Reset,Bold,Italic,Underline,Blink,Reverse,Hidden
-    #                                        ^
+    #
     [aws]="DarkOrange;Grey15;Bold"
     [bgjobs]="White;Grey11;Bold"
     [cwd]="SteelBlue1;Grey35;Bold"
@@ -592,6 +592,7 @@ declare -A __BASH_PL_SYMBOLS=(
 
     # Env
     [aws]=""               # U+F270
+    [gcp]=""               # U+E7B2
     [docker]=""            # U+E308
     [k8s]=""               # U+E91B
     [python]=""            # U+E235
@@ -639,13 +640,13 @@ declare -A __BASH_PL_SYMBOLS=(
     # shell
     [error_alt]="ErrorCode:"
     [locked_alt]="ReadOnly"
-    [background_alt]="BackGround:"
+    [background_alt]="Jobs:"
 
     # Env
     [aws_alt]="(AWS)"
     [docker_alt]="(Docker)"
     [k8s_alt]="(k8s)"
-    [python_alt]="(Python venv)"
+    [python_alt]="(Pyenv)"
     [terraform_alt]="(Terraform)"
 
     # Git
@@ -656,7 +657,7 @@ declare -A __BASH_PL_SYMBOLS=(
     [git_behind_alt]="<"
     [git_ahead_alt]=">"
     [git_tag_alt]="Tags:"
-    [git_stash_alt]="$"
+    [git_stash_alt]="@"
     [git_conflict_alt]="!"
     [git_branch_alt]=""
     [git_commit_alt]=""
@@ -1122,11 +1123,31 @@ function __module_user() {
 
 ################################################################################
 
-function aws-profile() {
+function pl-aws-profile() {
     local profile_name=${1}
 
-    test -z "${profile_name}" && { export AWS_PROFILE=""; return 0; }
-    grep -q ${profile_name} ${HOME}/.aws/config &>/dev/null || return 0
+    if [[ -z "${profile_name}" ]]; then
+        export AWS_PROFILE=""
+
+        echo -e "Configures profiles:\n--------------------\n$(\grep profile ${HOME}/.aws/config | \sed 's/^\[profile //g; s/\]//g')\n"
+        cat <<__MSG__
+To switch AWS profile, you can run:
+    pl-aws-profile <profile_name>
+__MSG__
+
+        return 0
+    fi
+
+    #test -z "${profile_name}" && { export AWS_PROFILE=""; return 0; }
+    if ! grep -q ${profile_name} ${HOME}/.aws/config &>/dev/null; then
+        cat <<__MSG__
+No found profile: ${profile_name}
+
+To check configured profiles, you can run this command with no arguments.
+__MSG__
+
+        return 1
+    fi
 
     export AWS_PROFILE=${profile_name}
 }

@@ -49,6 +49,8 @@ set hlsearch
 " move cursor prev/next line
 set whichwrap=b,s,h,l,<,>,[,],~
 
+" change leader : to space
+let mapleader = "\<Space>"
 
 " ===== dein.vim ===============================================================
 " dein.vim settings {{{
@@ -101,7 +103,11 @@ endif
 " lightline.vim
 let g:lightline = {
     \   'colorscheme':  'default',
-    \   'separator':    { 'left': '', 'right': '' },
+    \   'component': {
+    \       'readonly': '%{&filetype=="help"?"":&readonly?" ":""}',
+    \       'modified': '%{&filetype=="help"?"":&modified?" ":&modifiable?"":"-"}',
+    \   },
+    \   'separator':    { 'left': '', 'right': ' ' },
     \   'subseparator': { 'left': '', 'right': ' ' },
     \ }
 
@@ -111,6 +117,23 @@ let g:indentLine_char = '¦'
 " git gutter
 let g:gitgutter_highlight_lines = 0
 
+" NERDTree
+map <Leader>n :NERDTreeToggle<CR>
+let g:NERDTreeMapUpdir='<C-u>'
+let g:NERDTreeShowHidden=1
+let g:NERDTreeShowBookmarks=1
+
+
+let g:WebDevIconsUnicodeDecorateFolderNodes = 1
+let g:DevIconsEnableFoldersOpenClose = 1
+let g:WebDevIconsUnicodeDecorateFolderNodesDefaultSymbol = ' '
+let g:DevIconsDefaultFolderOpenSymbol = ' '
+" file-icons
+let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols = {}
+let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['html'] = ' '
+let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['css'] = ' '
+let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['md'] = ' '
+let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['txt'] = ' '
 
 "---- color settings ----
 syntax on
