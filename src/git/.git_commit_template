@@ -1,0 +1,95 @@
+
+
+# ==== Format ====
+# prefix(scope): :emoji: Commit body...
+#
+# backlog task key
+
+# ==== prefix ====
+# fix: FIX bug and typo
+# feat: Add new features
+# refactor: Refactoring
+# style: Changes related to style like css/sass
+# chore: Maintenance for file move, delete, rename and so on
+# test: Fix or changes for test features
+# docs: Changes documents
+# breaking: Disructive changes
+# build: Changes build processing(maven, gradle, gulp, webpack, etc.)
+# ci: Configurations CI/CD
+# pref: Improvements performance
+# revert: Revert changes
+# other: others
+
+# ==== Emojis ====
+# ----- project / features -----
+# 🎉 :tada:                 Begin a project!
+# ✨ :sparkles:             Introduce new features
+# 💥 :boom:                 Introduce breaking changes
+# 👍 :+1:                   Additional partial features
+# ----- refactor -----
+# ♻️️ :recycle:              Refactor code
+# 💬 :speech_balloon:       Add or update text and literals
+# 💡 :bulb:                 Add or update comments in source code
+# 🔊 :loud_sound:           Add or update logs
+# 🔇 :mute:                 Remove logs
+# 📁 :file_folder:          Perform database related changes
+# 🌐 :globe_with_meridians: i18n and localization
+# 👽 :alien:                Update code due to external API changes
+# ----- fix -----
+# ✏️ :pencil2:              Fix typos
+# 🐛 :bug:                  Fix bugs
+# 🚨 :rotating_light:       Fix compiler / Linter warnings
+# 🚑 :ambulance:            Critical HOTFIX
+# ----- WIP -----
+# 🚧 :construction:         WIP(Work In Progress)
+# 🍺 :beer:                 Write code drunkenly
+# 💩 :poop:                 Write bad codes that needs to be improved
+# ----- files or resources -----
+# 🔧 :wrench:               Add or update configuration files
+# 🔨 :hammer:               Add or update development scripts
+# 💄 :lipstick:             Add or update the UI and style files
+# 🍱 :bento:                Add or update assets
+# 📝 :memo:                 Add or update documents
+# 📄 :page_facing_up:       Add or update license
+# 🔥 :fire:                 Remove code or files
+# 🚚 :truck:                Move or rename resources (eg. files, paths, routes)
+# ----- test -----
+# ✅ :white_check_mark:     Add or update tests
+# ✔️ :heavy_check_mark:     Make a test pass
+# 🔒 :lock:                 Security-related improvements
+# ----- dependnecies -----
+# ➕ :heavy_plus_sign:      Add dependencies
+# ➖ :heavy_minus_sign:     Remove dependencies
+# ⬆️ :arrow_up:             Upgrade dependencies
+# ⬇️ :arrow_down:           Downgrade dependencies
+# 📌 :pushpin:              Pin dependencies to specific version
+# ----- git operation -----
+# 🔖 :bookmark:             Release / Version tags
+# 👌 :ok_hand:              Review-related changes
+# ⏪ :rewind:               Revert changes
+# 🔀 :twisted_rightwards_arrows: Merge branches
+# ----- CI -----
+# 👷 :construction_worker:  Add or update CI build system
+# 💚 :green_heart:          Fix CI build
+# ----- shipping -----
+# 🚀 :rocket:               Deploy stuff
+# 📦 :package:              Add or update compiled files or packages
+# ---- improvement -----
+# 🎨 :art:                  Improve structure / format of the code.
+# ⚡️ :zap:                  Improve performance
+# ♿ :wheelchair:           Improve accessibility
+# 🚸 :children_crossing:    Improve UX / usability
+# 🔍 :mag:                  Improve SEO
+
+# ==== The Seven Rules ====
+# 1. Separate subject from body with a blank line
+# 2. Limit the subject line to 50 characters
+# 3. Capitalize the subject line
+# 4. Do not end the subject line with a period
+# 5. Use the imperative mood in the subject line
+# 6. Wrap the body at 72 characters
+# 7. Use the body to explain what and why vs. how
+#
+# How to Write a Git Commit Message http://chris.beams.io/posts/git-commit/
+
+# for http://memo.goodpatch.co/2016/07/beautiful-commits-with-emojis/

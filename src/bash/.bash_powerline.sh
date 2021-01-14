@@ -586,49 +586,49 @@ declare -A __BASH_PL_SYMBOLS=(
     [fill_separator]=""    # U+E0B0
 
     # shell
-    [error]=""             # U+F421
-    [locked]=""            # U+E0A2
-    [background]=""        # U+F110
+    [error]=" "            # U+F421
+    [locked]=" "           # U+E0A2
+    [background]=" "       # U+F110
 
     # Env
-    [aws]=""               # U+F270
-    [gcp]=""               # U+E7B2
-    [docker]=""            # U+E308
-    [k8s]=""               # U+E91B
-    [python]=""            # U+E235
-    [terraform]=""         # U+E740
+    [aws]=" "              # U+F270
+    [gcp]=" "              # U+E7B2
+    [docker]=" "           # U+E308
+    [k8s]=" "              # U+E91B
+    [python]=" "           # U+E235
+    [terraform]=" "        # U+E740
 
     # Git
     [octcat]=" "           # U+F408
-    [git_staged]=""        # U+F440
-    [git_modified]=""      # U+F448
-    [git_untracked]=""     # U+F420
-    [git_behind]=""        # U+F409
-    [git_ahead]=""         # U+F40A
-    [git_tag]=""           # U+F412
-    [git_stash]=""         # U+F487
-    [git_conflict]=""      # U+F46E
-    [git_branch]=""        # U+F418
-    [git_commit]=""        # U+F417
-    [git_merge]=""         # U+F407
-    [git_rebase]=""        # U+F419
-    [git_patch]=""         # U+F47F
-    [git_cherry]=""        # U+E29B
-    [git_revert]=""        # U+F4A8
-    [git_bisect]=""        # U+F402
+    [git_staged]=" "       # U+F440
+    [git_modified]=" "     # U+F448
+    [git_untracked]=" "    # U+F420
+    [git_behind]=" "       # U+F409
+    [git_ahead]=" "        # U+F40A
+    [git_tag]=" "          # U+F412
+    [git_stash]=" "        # U+F487
+    [git_conflict]=" "     # U+F46E
+    [git_branch]=" "       # U+F418
+    [git_commit]=" "       # U+F417
+    [git_merge]=" "        # U+F407
+    [git_rebase]=" "       # U+F419
+    [git_patch]=" "        # U+F47F
+    [git_cherry]=" "       # U+E29B
+    [git_revert]=" "       # U+F4A8
+    [git_bisect]=" "       # U+F402
 
     # Host
-    [win]=""               # U+E70F
-    [ubuntu]=""            # U+F31C
-    [redhat]=""            # U+F316
-    [centos]=""            # U+F304
+    [win]=" "              # U+E70F
+    [ubuntu]=" "           # U+F31C
+    [redhat]=" "           # U+F316
+    [centos]=" "           # U+F304
 
     # Common
-    [user]=""              # U+F415
-    [home]=""              # U+F46D
-    [dir]=""               # U+F413
-    [time]=""              # U+F43A
-    [tls]=""               # U+F43D
+    [user]=" "             # U+F415
+    [home]=" "             # U+F46D
+    [dir]=" "              # U+F413
+    [time]=" "             # U+F43A
+    [tls]=" "              # U+F43D
 
 
     ##################
@@ -746,7 +746,7 @@ function __append_prompt() {
     local _add_prompt=${1}
     local _callee_module=${FUNCNAME[1]//__module_/}
 
-    __update_color_of ${_callee_module}
+    __update_color_of "${_callee_module}"
 
     if [[ -n ${__ps1_buffer__} ]]; then
         __ps1_buffer__+="${__separator_color__}${__BASH_PL_SYMBOLS[fill_separator${__BASH_PL_SYMBOL_DISABLE:+_alt}]}${__BASH_PL_ATTRS[Reset]}"
@@ -769,9 +769,9 @@ function __parse_attributes() {
 
     __module_attrs__=${__BASH_PL_ATTRS[Reset]}
 
-    while IFS= read -d ';' attr; do
+    while IFS= read -r -d ';' attr; do
         __module_attrs__+=${__BASH_PL_ATTRS[${attr}]}
-    done <<<${_module_attrs}";"
+    done <<<"${_module_attrs};"
 }
 
 
@@ -784,10 +784,10 @@ function __update_color_of() {
     local _bg_color
     local _attrs
 
-    IFS=$";" read _fg_color _bg_color _attrs <<<${__BASH_PL_MODULE_COLORS[${_module_name}]}
-    test ! -z ${_attrs} && __parse_attributes ${_attrs}
+    IFS=$";" read -r _fg_color _bg_color _attrs <<<"${__BASH_PL_MODULE_COLORS[${_module_name}]}"
+    test -n "${_attrs}" && __parse_attributes "${_attrs}"
 
-    if [[ ! -z ${__ps1_buffer__} ]]; then
+    if [[ -n ${__ps1_buffer__} ]]; then
         __separator_color__="${__BASH_PL_ATTRS[Reset]}${__BASH_PL_FG_COLORS[${__prev_bg_color__}]}${__BASH_PL_BG_COLORS[${_bg_color}]}"
     fi
 
@@ -805,7 +805,7 @@ function __update_color_of() {
 # newline module
 # --------------
 function __module_newline() {
-    if [[ ! -z ${__ps1_buffer__} ]]; then
+    if [[ -n ${__ps1_buffer__} ]]; then
         __update_color_of newline
         __flush_line
     fi
@@ -841,12 +841,12 @@ function __module_bgjobs() {
 function __module_cwd() {
     local _tmp_ps1
 
-    if [[ ${PWD} != ${__BASH_PL_OLDPWD} ]]; then
+    if [[ ${PWD} != "${__BASH_PL_OLDPWD}" ]]; then
         local _pwd_dirs
         local _pwd=${PWD//@(*Users|${HOME})/\~}
         _pwd=${_pwd// /___}
 
-        test ${_pwd:0:1} = "~" \
+        test "${_pwd:0:1}" = "~" \
             && _tmp_ps1="${__BASH_PL_SYMBOLS[home${__BASH_PL_SYMBOL_DISABLE:+_alt}]}" \
             || _tmp_ps1="${__BASH_PL_SYMBOLS[dir${__BASH_PL_SYMBOL_DISABLE:+_alt}]}"
 
@@ -855,7 +855,7 @@ function __module_cwd() {
         elif [[ ${__BASH_PL_DIR_FORMAT} = "short"   ]]; then
             _tmp_ps1+=${_pwd}
         else
-            IFS=$'/' read -a _pwd_dirs <<<${_pwd#/}
+            IFS=$'/' read -r -a _pwd_dirs <<<"${_pwd#/}"
 
             if   [[ ${#_pwd_dirs[@]} -gt 5 ]]; then
                 _tmp_ps1+="${_pwd_dirs[0]} ${__BASH_PL_SYMBOLS[line_separator${__BASH_PL_SYMBOL_DISABLE:+_alt}]//|//} "
@@ -869,7 +869,7 @@ function __module_cwd() {
                 _pwd_dirs=("${_pwd_dirs[@]:1}")
             fi
 
-            for dir in ${_pwd_dirs[@]}; do
+            for dir in "${_pwd_dirs[@]}"; do
                 _tmp_ps1+=" ${__BASH_PL_SYMBOLS[line_separator${__BASH_PL_SYMBOL_DISABLE:+_alt}]//|//} ${dir//___/ }"
             done
         fi
@@ -928,8 +928,8 @@ function __module_git() {
     local _inside_work_tree
     local _hash
 
-    read -d '\n' _git_dir _inside_git_dir _inside_work_tree _hash \
-        <<<$(git rev-parse --git-dir --is-inside-git-dir --is-inside-work-tree --short HEAD 2>/dev/null)
+    read -r -d '\n' _git_dir _inside_git_dir _inside_work_tree _hash \
+        <<<"$(git rev-parse --git-dir --is-inside-git-dir --is-inside-work-tree --short HEAD 2>/dev/null)"
 
     if [[ ${_inside_git_dir} = "true" || ${_inside_work_tree} != "true" ]]; then
         return 0
@@ -968,17 +968,19 @@ function __module_git() {
     local _total
     local _head
     if   [[ -d ${_git_dir}/rebase-merge ]]; then
-            read _step _total _head \
-                <<<"$(< ${_git_dir}/rebase-merge/msgnum) $(< ${_git_dir}/rebase-merge/end) $(< ${_git_dir}/rebase-merge/head-name)"
+        # shellcheck disable=SC2086
+        read -r _step _total _head \
+            <<<"$(< ${_git_dir}/rebase-merge/msgnum) $(< ${_git_dir}/rebase-merge/end) $(< ${_git_dir}/rebase-merge/head-name)"
 
-            if [[ -f ${_git_dir}/rebase-merge/interactive ]]; then
-                _rebase+="${__BASH_PL_SYMBOLS[git_rebase${__BASH_PL_SYMBOL_DISABLE:+_alt}]}REBASING(interactive)"
-            else
-                _rebase+="${__BASH_PL_SYMBOLS[git_rebase${__BASH_PL_SYMBOL_DISABLE:+_alt}]}REBASING(merge)"
-            fi
+        if [[ -f ${_git_dir}/rebase-merge/interactive ]]; then
+            _rebase+="${__BASH_PL_SYMBOLS[git_rebase${__BASH_PL_SYMBOL_DISABLE:+_alt}]}REBASING(interactive)"
+        else
+            _rebase+="${__BASH_PL_SYMBOLS[git_rebase${__BASH_PL_SYMBOL_DISABLE:+_alt}]}REBASING(merge)"
+        fi
     else
         if [[ -d ${_git_dir}/rebase-apply ]]; then
-            read _step _total _head \
+            # shellcheck disable=SC2086
+            read -r _step _total _head \
                 <<<"$(< ${_git_dir}/rebase-apply/next) $(< ${_git_dir}/rebase-apply/last) $(< ${_git_dir}/rebase-apply/head-name)"
 
             if   [[ -f ${_git_dir}/rebase-apply/rebasing ]]; then
@@ -998,7 +1000,8 @@ function __module_git() {
             _rebase+="${__BASH_PL_SYMBOLS[git_bisect${__BASH_PL_SYMBOL_DISABLE:+_alt}]}BISECTING"
         else
             # Check tag at this commit.
-            local _tags=$(git tag --points-at HEAD --column=always 2>/dev/null)
+            local _tags
+            _tags="$(git tag --points-at HEAD --column=always 2>/dev/null)"
             _tags="${_tags:+${_separator}${__BASH_PL_FG_COLORS[Olive]}${__BASH_PL_SYMBOLS[git_tag${__BASH_PL_SYMBOL_DISABLE:+_alt}]}${_tags//+([[:space:]])/,}}"
         fi
 
@@ -1020,8 +1023,9 @@ function __module_git() {
     local _ahead
     local _behind
     local _remote_diff
-    read _behind _ahead <<<$(git rev-list --count --left-right '@{upstream}...HEAD' 2>/dev/null)
+    read -r _behind _ahead <<<"$(git rev-list --count --left-right '@{upstream}...HEAD' 2>/dev/null)"
 
+    # shellcheck disable=SC2181
     if [[ $? -eq 0 ]]; then
         if [[ ${_behind} -ne 0 ]]; then
             _remote_diff+="${__BASH_PL_SYMBOLS[git_behind${__BASH_PL_SYMBOL_DISABLE:+_alt}]}${_behind}"
@@ -1129,6 +1133,7 @@ function pl-aws-profile() {
     if [[ -z "${profile_name}" ]]; then
         export AWS_PROFILE=""
 
+        # shellcheck disable=SC2086
         echo -e "Configures profiles:\n--------------------\n$(\grep profile ${HOME}/.aws/config | \sed 's/^\[profile //g; s/\]//g')\n"
         cat <<__MSG__
 To switch AWS profile, you can run:
@@ -1138,8 +1143,7 @@ __MSG__
         return 0
     fi
 
-    #test -z "${profile_name}" && { export AWS_PROFILE=""; return 0; }
-    if ! grep -q ${profile_name} ${HOME}/.aws/config &>/dev/null; then
+    if ! grep -q "${profile_name}" "${HOME}"/.aws/config &>/dev/null; then
         cat <<__MSG__
 No found profile: ${profile_name}
 
@@ -1196,8 +1200,15 @@ function pl-kube-context() {
     local _tmp_mark
     local _tmp_auth
 
-    kubectl config use-context ${1}
-    read _tmp_mark __BASH_PL_K8S_CONTEXT __BASH_PL_K8S_CLUSTER _tmp_auth __BASH_PL_K8S_NAMESPACE <<<$(kubectl config get-contexts | sed -n '/^\*/ p')
+    kubectl config use-context "${1}"
+    # shellcheck disable=SC2034
+    read -r \
+        _tmp_mark \
+        __BASH_PL_K8S_CONTEXT \
+        __BASH_PL_K8S_CLUSTER \
+        _tmp_auth \
+        __BASH_PL_K8S_NAMESPACE \
+        <<<"$(kubectl config get-contexts | sed -n '/^\*/ p')"
 }
 
 
@@ -1207,8 +1218,8 @@ function pl-kube-context() {
 function __bash_powerline() {
     __setup
 
-    for _module_prefix in ${__BASH_PL_MODULES[@]}; do
-        __module_${_module_prefix}
+    for _module_name in "${__BASH_PL_MODULES[@]}"; do
+        __module_"${_module_name}"
     done
 
     __teardown

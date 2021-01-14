@@ -261,11 +261,11 @@ function 256colors() {
     )
 
     # Print Header
-    printf "  %3s  %-17s  %-7s  %-16s  %-9s  %-9s\n" "No." "Color Name" "Hex" "RGB" "TermFG" "BoldFG" "TermBG"
+    printf "  %3s  %-17s  %-7s  %-16s  %-9s  %-11s  %-9s\n" "No." "Color Name" "Hex" "RGB" "TermFG" "BoldFG" "TermBG"
     echo "------------------------------------------------------------------------------------"
 
     for i in $(seq 0 255); do
-        IFS=$';' read name hex rgb <<<${COLORS[${i}]}
-        printf "  %3d  %-17s  %-7s  %-16s  \x1b[38;05;${i}m38;05;%-3d\x1b[0m  \x1b[1m\x1b[38;05;${i}m38;05;%-3d\x1b[0m  \x1b[48;05;${i}m48;05;%-3d\x1b[0m\n" ${i} "${name}" "${hex}" "${rgb}" ${i} ${i} ${i}
+        IFS=$';' read -r name hex rgb <<<"${COLORS[${i}]}"
+        printf "  %3d  %-17s  %-7s  %-16s  \x1b[38;05;${i}m38;05;%-3d\x1b[0m  \x1b[1;38;05;${i}m1;38;05;%-3d\x1b[0m  \x1b[48;05;${i}m48;05;%-3d\x1b[0m\n" "${i}" "${name}" "${hex}" "${rgb}" "${i}" "${i}" "${i}"
     done
 }

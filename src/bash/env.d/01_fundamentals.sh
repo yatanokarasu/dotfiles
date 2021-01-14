@@ -1,5 +1,5 @@
+#!/bin/bash
 
-# bash foundation
 export EDITOR=vim
 export PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME:+$FUNCNAME(): }'
 
