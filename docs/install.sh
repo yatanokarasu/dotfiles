@@ -259,7 +259,4 @@ dotfiles_install() {
     deploy_dotfiles
 }
 
-echo ${0}; shift
-echo ${1}; shift
-echo "$@"
-#dotfiles_install
+dotfiles_install
