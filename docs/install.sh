@@ -1,15 +1,35 @@
 #!/bin/bash
+#
+#  _____     ______     ______   ______   __     __         ______     ______
+# /\  __-.  /\  __ \   /\__  _\ /\  ___\ /\ \   /\ \       /\  ___\   /\  ___\
+# \ \ \/\ \ \ \ \/\ \  \/_/\ \/ \ \  __\ \ \ \  \ \ \____  \ \  __\   \ \___  \
+#  \ \____-  \ \_____\    \ \_\  \ \_\    \ \_\  \ \_____\  \ \_____\  \/\_____\
+#   \/____/   \/_____/     \/_/   \/_/     \/_/   \/_____/   \/_____/   \/_____/
+#
+#   Copyright 2021 Yusuke TAKEI
+#
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
 
-# CURRENT_DIR=$(cd $(dirname $0); pwd)
 
-# for _dotfile in $(ls -1A ${CURRENT_DIR}); do
-#     if [[ ! ${_dotfile} =~ ^\. || ${_dotfile} == .git ]]; then
-#         continue
-#     fi
-
-#     ln -snf ${CURRENT_DIR}/${_dotfile} ${HOME}/${_dotfile}
-# done
-
+# log snippet
+readonly LOGO=$(cat <<'__LOGO__'
+ _____     ______     ______   ______   __     __         ______     ______
+/\  __-.  /\  __ \   /\__  _\ /\  ___\ /\ \   /\ \       /\  ___\   /\  ___\
+\ \ \/\ \ \ \ \/\ \  \/_/\ \/ \ \  __\ \ \ \  \ \ \____  \ \  __\   \ \___  \
+ \ \____-  \ \_____\    \ \_\  \ \_\    \ \_\  \ \_____\  \ \_____\  \/\_____\
+  \/____/   \/_____/     \/_/   \/_/     \/_/   \/_____/   \/_____/   \/_____/
+__LOGO__
+)
 
 # commands as canonical path
 readonly CMD_GREP=$(which grep)
@@ -20,6 +40,7 @@ readonly CMD_TAR=$(which tar)
 # constants
 readonly DOTFILES_REPO_URL=https://github.com/yatanokarasu/dotfiles.git
 readonly DOTFILES_DIR=$(${CMD_READLINK} -f "${DOT_DIR:-${HOME}/.dotfiles}")
+readonly DOTFILES_ARCHIVE_URL=https://github.com/yatanokarasu/dotfiles/archive/latest.tar.gz
 
 readonly SNIPPET_TITLE="THIS MUST BE AT THE END OF THE FILE FOR DOTFILES TO WORK!!!"
 readonly BASH_SNIPPET="
@@ -35,7 +56,6 @@ done
 
 # Enable powerline
 source \${DOTFILES_DIR}/src/bash/.bash_powerline.sh
-
 ### ============================================================================"
 
 # colors
@@ -253,10 +273,34 @@ deploy_dotfiles() {
 }
 
 
+last_notice() {
+    echo
+    red     "🎉" bold
+    magenta "🎉" bold
+    yellow  "🎉" bold
+    white "  ALL DONE!!!  " bold
+    green   "🎉" bold
+    cyan    "🎉" bold
+    blue    "🎉" bold
+    echo
+    echo
+    echo "Please open a new terminal, or run the following in the existing one:"
+    echo
+    echo "    exec bash"
+    echo
+    white "Enjoy!!!" bold; echo
+}
+
+
 dotfiles_install() {
+    echo
+    echo "${LOGO}"
+    echo
+
     check_prerequisite &&
     fetch_dotfiles &&
-    deploy_dotfiles
+    deploy_dotfiles &&
+    last_notice
 }
 
 dotfiles_install
