@@ -259,6 +259,8 @@ symlink_other_dotfiles() {
             echo
         done
     done
+
+    echo
 }
 
 
@@ -273,8 +275,7 @@ deploy_dotfiles() {
 }
 
 
-last_notice() {
-    echo
+celebration() {
     red     "🎉" bold
     magenta "🎉" bold
     yellow  "🎉" bold
@@ -284,6 +285,10 @@ last_notice() {
     blue    "🎉" bold
     echo
     echo
+}
+
+
+last_notice() {
     echo "Please open a new terminal, or run the following in the existing one:"
     echo
     echo "    exec bash"
@@ -300,6 +305,8 @@ dotfiles_install() {
     check_prerequisite &&
     fetch_dotfiles &&
     deploy_dotfiles &&
+    celebration
+
     last_notice
 }
 
