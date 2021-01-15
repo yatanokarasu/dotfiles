@@ -39,6 +39,7 @@
 # ✏️ :pencil2:              Fix typos
 # 🐛 :bug:                  Fix bugs
 # 🚨 :rotating_light:       Fix compiler / Linter warnings
+# 🔒 :lock:                 Fix security issues
 # 🚑 :ambulance:            Critical HOTFIX
 # ----- WIP -----
 # 🚧 :construction:         WIP(Work In Progress)
@@ -51,12 +52,12 @@
 # 🍱 :bento:                Add or update assets
 # 📝 :memo:                 Add or update documents
 # 📄 :page_facing_up:       Add or update license
+# 🙈 :see_no_evil:          Add or update .gitignore file
 # 🔥 :fire:                 Remove code or files
 # 🚚 :truck:                Move or rename resources (eg. files, paths, routes)
 # ----- test -----
 # ✅ :white_check_mark:     Add or update tests
 # ✔️ :heavy_check_mark:     Make a test pass
-# 🔒 :lock:                 Security-related improvements
 # ----- dependnecies -----
 # ➕ :heavy_plus_sign:      Add dependencies
 # ➖ :heavy_minus_sign:     Remove dependencies
