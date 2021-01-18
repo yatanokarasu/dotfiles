@@ -302,7 +302,7 @@ initlization() {
         return
     fi
 
-    bash "${DOTFILES_DIR}/bin/init.sh"
+    bash "${DOTFILES_DIR}/bin/init.sh" && touch "${DOTFILES_DIR}/.initialized"
 }
 
 
