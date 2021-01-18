@@ -297,6 +297,15 @@ last_notice() {
 }
 
 
+initlization() {
+    if [ ! -f "${DOTFILES_DIR}/.initialized" ]; then
+        return
+    fi
+
+    bash "${DOTFILES_DIR}/bin/init.sh"
+}
+
+
 dotfiles_install() {
     echo
     echo "${LOGO}"
@@ -306,6 +315,8 @@ dotfiles_install() {
     fetch_dotfiles &&
     deploy_dotfiles &&
     celebration
+
+    initlization
 
     last_notice
 }
