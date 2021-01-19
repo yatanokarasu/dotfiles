@@ -1,24 +1,10 @@
 
 
 # ==== Format ====
-# prefix(scope): :emoji: Commit body...
+# :emoji: Commit body...
 #
 # backlog task key
 
-# ==== prefix ====
-# fix: FIX bug and typo
-# feat: Add new features
-# refactor: Refactoring
-# style: Changes related to style like css/sass
-# chore: Maintenance for file move, delete, rename and so on
-# test: Fix or changes for test features
-# docs: Changes documents
-# breaking: Disructive changes
-# build: Changes build processing(maven, gradle, gulp, webpack, etc.)
-# ci: Configurations CI/CD
-# pref: Improvements performance
-# revert: Revert changes
-# other: others
 
 # ==== Emojis ====
 # ----- project / features -----
