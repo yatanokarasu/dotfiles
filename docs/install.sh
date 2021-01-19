@@ -41,7 +41,7 @@ readonly CMD_TAR=$(which tar)
 # constants
 readonly DOTFILES_REPO_URL=https://github.com/yatanokarasu/dotfiles.git
 readonly DOTFILES_DIR=$(${CMD_READLINK} -f "${DOT_DIR:-${HOME}/.dotfiles}")
-readonly DOTFILES_ARCHIVE_URL=https://github.com/yatanokarasu/dotfiles/archive/latest.tar.gz
+readonly DOTFILES_ARCHIVE_URL=https://github.com/yatanokarasu/dotfiles/archive/master.tar.gz
 
 readonly SNIPPET_TITLE="THIS MUST BE AT THE END OF THE FILE FOR DOTFILES TO WORK!!!"
 readonly BASH_SNIPPET="
