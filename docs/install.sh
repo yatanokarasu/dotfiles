@@ -34,6 +34,7 @@ __LOGO__
 # commands as canonical path
 readonly CMD_GREP=$(which grep)
 readonly CMD_LN=$(which ln)
+readonly CMD_MKDIR=$(which mkdir)
 readonly CMD_READLINK=$(which readlink)
 readonly CMD_TAR=$(which tar)
 
@@ -219,6 +220,7 @@ fetch_dotfiles() {
         fetch_command="${fetch_command} -qO-";;
     esac
 
+    ${CMD_MKDIR} -p "${DOTFILES_DIR}"
     ${fetch_command} "${DOTFILES_ARCHIVE_URL}" \
         | ${CMD_TAR} zxf - -C "${DOTFILES_DIR}" --strip-components 1
 }
