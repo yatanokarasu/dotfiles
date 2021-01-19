@@ -3,7 +3,7 @@
 readonly ASDF_REPO_URL=https://github.com/asdf-vm/asdf.git
 
 
-asdf_install() {
+install_asdf() {
     git clone "${ASDF_REPO_URL}" "${HOME}/.asdf" || exit 255
     # shellcheck disable=SC2164
     pushd "${HOME}/.asdf" >/dev/null
@@ -13,7 +13,7 @@ asdf_install() {
 }
 
 
-asdf_plugins_install() {
+install_asdf_plugins() {
     # shellcheck disable=SC1090
     source "${HOME}/.asdf/asdf.sh"
 
@@ -32,8 +32,8 @@ asdf_plugins_install() {
 
 
 echo "Installing asdf-vm..."
-asdf_install
-asdf_plugins_install
+install_asdf
+install_asdf_plugins
 echo
 echo "🎉 asdf-vm installation is complete!!"
 echo

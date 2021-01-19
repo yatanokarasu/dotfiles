@@ -302,7 +302,11 @@ initlization() {
         return
     fi
 
-    bash "${DOTFILES_DIR}/bin/init.sh" && touch "${DOTFILES_DIR}/.initialized"
+    if grep -qsi "Ubuntu" /etc/issue; then
+        bash "${DOTFILES_DIR}/bin/init.sh" && touch "${DOTFILES_DIR}/.initialized"
+    else
+        echo "Initialization can execute on Ubuntu only."
+    fi
 }
 
 
