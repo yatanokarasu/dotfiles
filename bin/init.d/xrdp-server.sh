@@ -2,6 +2,11 @@
 
 
 echo "Installing xrdp-server..."
+
+echo "➜ Updating APT repositories..."
+sudo apt -y update
+
+echo
 echo "➜ Installing xrdp xorgxrdp xserver-xorg-{video,input}-all..."
 sudo apt install -y \
     xrdp \

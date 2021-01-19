@@ -24,7 +24,7 @@ sudo make install
 echo
 echo "➜ Post-installing..."
 sudo chmod u+s /usr/local/bin/x-set-keys
-cat <<'__KEYS__' | sudo tee -a /etc/x-set-keys.conf2 >/dev/null
+cat <<'__KEYS__' | sudo tee -a /etc/x-set-keys.conf >/dev/null
 #####################
 # Basic mappings
 #####################
@@ -91,7 +91,7 @@ C-period :: C-End
 C-x C-w :: C-S-s
 __KEYS__
 
-cat <<'__PROFILE__' >>"${HOME}/.profile2"
+cat <<'__PROFILE__' >>"/etc/profile.d/x-set-keys.sh"
 
 if [ -z "${TMUX}" ]; then
     if [ -f /usr/local/bin/x-set-keys ] && pgrep -v x-set-keys >/dev/null; then
