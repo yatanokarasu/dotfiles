@@ -3,6 +3,13 @@
 readonly ASDF_REPO_URL=https://github.com/asdf-vm/asdf.git
 
 
+install_prerequisite() {
+    sudo apt -y install \
+        unzip \
+        || { echo "Failed to install necessary packages."; exit 128; }
+}
+
+
 install_asdf() {
     git clone "${ASDF_REPO_URL}" "${HOME}/.asdf" || exit 255
     # shellcheck disable=SC2164
@@ -32,6 +39,7 @@ install_asdf_plugins() {
 
 
 echo "Installing asdf-vm..."
+install_prerequisite
 install_asdf
 install_asdf_plugins
 echo
