@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-echo "Installing x-set-keys for emacs key-binding..."
+echo "Installing docker-ce..."
 
 echo "➜ Updating APT repositories..."
 sudo apt -y update

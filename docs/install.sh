@@ -21,16 +21,6 @@
 #   limitations under the License.
 
 
-# log snippet
-readonly LOGO=$(cat <<'__LOGO__'
- _____     ______     ______   ______   __     __         ______     ______
-/\  __-.  /\  __ \   /\__  _\ /\  ___\ /\ \   /\ \       /\  ___\   /\  ___\
-\ \ \/\ \ \ \ \/\ \  \/_/\ \/ \ \  __\ \ \ \  \ \ \____  \ \  __\   \ \___  \
- \ \____-  \ \_____\    \ \_\  \ \_\    \ \_\  \ \_____\  \ \_____\  \/\_____\
-  \/____/   \/_____/     \/_/   \/_/     \/_/   \/_____/   \/_____/   \/_____/
-__LOGO__
-)
-
 # commands as canonical path
 readonly CMD_GREP=$(which grep)
 readonly CMD_LN=$(which ln)
@@ -81,6 +71,17 @@ declare -A COLORS=(
     [bold_cyan]="\e[1;36m"
     [bold_white]="\e[1;37m"
 )
+
+
+print_logo() {
+    echo ''
+    echo ' _____     ______     ______   ______   __     __         ______     ______     '
+    echo '/\  __-.  /\  __ \   /\__  _\ /\  ___\ /\ \   /\ \       /\  ___\   /\  ___\    '
+    echo '\ \ \/\ \ \ \ \/\ \  \/_/\ \/ \ \  __\ \ \ \  \ \ \____  \ \  __\   \ \___  \   '
+    echo ' \ \____-  \ \_____\    \ \_\  \ \_\    \ \_\  \ \_____\  \ \_____\  \/\_____\  '
+    echo '  \/____/   \/_____/     \/_/   \/_/     \/_/   \/_____/   \/_____/   \/_____/  '
+    echo ''
+}
 
 
 color() {
@@ -253,6 +254,7 @@ symlink_other_dotfiles() {
 
         for _dot in "${_tool}"/.??*; do
             white " ➜ \${HOME}/${_dot##*/}... "
+
             # shellcheck disable=SC2015
             ${CMD_LN} -sf "${_dot}" "${HOME}"/ \
                 && check_ok \
@@ -313,9 +315,7 @@ initlization() {
 
 
 dotfiles_install() {
-    echo
-    echo "${LOGO}"
-    echo
+    print_logo
 
     check_prerequisite &&
     fetch_dotfiles &&

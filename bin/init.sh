@@ -35,12 +35,11 @@ if [ "${#setup_tools[@]}" -eq 0 ]; then
     echo
     echo "Initilization does nothing"
     echo
-    echo
 
     exit 1
 fi
 
 
 for _tool_installer in "${setup_tools[@]}"; do
-    bash "${_tool_installer}"
+    bash "${current_filepath}/init.d/${_tool_installer}"
 done
