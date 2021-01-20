@@ -302,7 +302,7 @@ last_notice() {
 
 
 initlization() {
-    if [ ! -f "${DOTFILES_DIR}/.initialized" ]; then
+    if [ -f "${DOTFILES_DIR}/.initialized" ]; then
         return
     fi
 

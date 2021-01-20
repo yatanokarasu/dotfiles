@@ -15,17 +15,17 @@
 #   limitations under the License.
 
 
-current_filepath=$(readlink -f "$0")
+current_filepath=$(dirname "$(readlink -f "$0")")
 setup_tools=()
 
 echo "Would you like to setup ..."
-for _part in "${current_filepath%/*}"/init.d/*.sh; do
+for _part in "${current_filepath}"/init.d/*.sh; do
     _filename="${_part##*/}"
 
-    echo -n "  ${_filename%.sh}? (y/[n]): "
+    echo -n "  ${_filename%.sh}? (y/N): "
     read -r _input
 
-    if [ -n "${_input}" ] && grep -qiE "y|yes" <<<"${_input}"; then
+    if [ -n "${_input}" ] && grep -qiE "y|yes" <<<"${_input,,}"; then
         setup_tools+=("${_filename}")
     fi
 done
