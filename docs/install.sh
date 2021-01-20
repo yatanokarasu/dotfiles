@@ -216,7 +216,7 @@ fetch_dotfiles() {
         fetch_via_git
         return 0;;
     "curl")
-        fetch_command="${fetch_command} -ksL ${HTTP_PROXY:+-x "${HTTP_PROXY}" }-o-";;
+        fetch_command="${fetch_command} -k#SfL ${HTTP_PROXY:+-x "${HTTP_PROXY}" }-o-";;
     "wget")
         fetch_command="${fetch_command} -qO-";;
     esac
