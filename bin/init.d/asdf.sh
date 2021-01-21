@@ -4,7 +4,19 @@ readonly ASDF_REPO_URL=https://github.com/asdf-vm/asdf.git
 
 
 install_prerequisite() {
+    echo "➜ Installing necessary packages..."
     sudo apt -y install \
+        build-essential \
+        automake \
+        autoconf \
+        libreadline-dev \
+        libncurses-dev \
+        libssl-dev \
+        libyaml-dev \
+        libxslt1-dev \
+        libffi-dev \
+        libtool \
+        unixodbc-dev \
         unzip \
         || { echo "Failed to install necessary packages."; exit 128; }
 }
