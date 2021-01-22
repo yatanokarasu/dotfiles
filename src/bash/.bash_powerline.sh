@@ -683,6 +683,28 @@ declare -A __BASH_PL_SYMBOLS=(
 )
 
 
+# Global Vars
+export __BASH_PL_PREV_DIRS
+export __BASH_PL_OLDPWD
+export __BASH_PL_DIR_FORMAT_OLD
+export __BASH_PL_DIR_FORMAT=${__BASH_PL_DIR_FORMAT:-"full"} # or short,dironly
+export __BASH_PL_WRAP_COLUMN=${__BASH_PL_WRAP_COLUMN:-100}
+export __BASH_PL_GIT_NEWLINE=${__BASH_PL_GIT_NEWLINE:-true}
+
+# Flags
+export __BASH_PL_AWS_DISABLE
+export __BASH_PL_DOCKER_DISABLE
+export __BASH_PL_GIT_DISABLE
+export __BASH_PL_PYTHON_DISABLE
+export __BASH_PL_K8S_DISABLE
+export __BASH_PL_SYMBOL_DISABLE
+export __BASH_PL_TERRAFORM_DISABLE
+
+# For performance (DO NOT TOUCH)
+export __BASH_PL_K8S_CONTEXT
+export __BASH_PL_K8S_CLUSTER
+export __BASH_PL_K8S_NAMESPACE
+
 
 ################################################################################
 # FUNCTIONS
@@ -698,28 +720,6 @@ function __setup() {
     __prev_bg_color__=""
 
     __ps1_buffer__=""
-
-    # Global Vars
-    export __BASH_PL_PREV_DIRS
-    export __BASH_PL_OLDPWD
-    export __BASH_PL_DIR_FORMAT_OLD
-    export __BASH_PL_DIR_FORMAT=${__BASH_PL_DIR_FORMAT:-"full"} # or short,dironly
-    export __BASH_PL_WRAP_COLUMN=${__BASH_PL_WRAP_COLUMN:-100}
-    export __BASH_PL_GIT_NEWLINE=${__BASH_PL_GIT_NEWLINE:-true}
-
-    # Flags
-    export __BASH_PL_AWS_DISABLE
-    export __BASH_PL_DOCKER_DISABLE
-    export __BASH_PL_GIT_DISABLE
-    export __BASH_PL_PYTHON_DISABLE
-    export __BASH_PL_K8S_DISABLE
-    export __BASH_PL_SYMBOL_DISABLE
-    export __BASH_PL_TERRAFORM_DISABLE
-
-    # For performance (DO NOT TOUCH)
-    export __BASH_PL_K8S_CONTEXT
-    export __BASH_PL_K8S_CLUSTER
-    export __BASH_PL_K8S_NAMESPACE
 
     PS1=""
 }
