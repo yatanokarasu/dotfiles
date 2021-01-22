@@ -3,6 +3,7 @@ direnv 2.27.0
 elixir 1.11.3-otp-23
 fzf 0.25.0
 golang 1.15.7
+gradle 6.8-milestone-3
 groovy 3.0.7
 helm 3.5.0
 helmfile 0.137.0
