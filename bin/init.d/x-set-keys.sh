@@ -94,7 +94,7 @@ __KEYS__
 cat <<'__PROFILE__' >>"/etc/profile.d/x-set-keys.sh"
 
 if [ -z "${TMUX}" ]; then
-    if [ -f /usr/local/bin/x-set-keys ] && pgrep -v x-set-keys >/dev/null; then
+    if [ -f /usr/local/bin/x-set-keys ] && ! pgrep -x x-set-keys >/dev/null; then
         /usr/local/bin/x-set-keys \
             --exclude-focus-class="Gnome-terminal" \
             /etc/x-set-keys.conf >/dev/null 2>&1 &
