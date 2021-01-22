@@ -931,6 +931,10 @@ function __module_docker() {
 # Prompt module
 # --------------
 function __module_prompt() {
+    if [[ $(id -u) -eq 0 ]]; then
+        __BASH_PL_MODULE_COLORS[prompt]="Maroon;Grey23;Bold"
+    fi
+
     __append_prompt "\\$"
 }
 
