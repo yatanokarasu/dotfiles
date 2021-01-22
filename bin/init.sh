@@ -23,7 +23,7 @@ for _part in "${current_filepath}"/init.d/*.sh; do
     _filename="${_part##*/}"
 
     echo -n "  ${_filename%.sh}? (y/N): "
-    read -r _input
+    read -r _input </dev/tty
 
     if [ -n "${_input}" ] && grep -qiE "y|yes" <<<"${_input,,}"; then
         setup_tools+=("${_filename}")

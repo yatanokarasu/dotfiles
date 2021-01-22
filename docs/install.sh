@@ -254,7 +254,7 @@ deploy_dotfiles() {
     # deploy as root user if you want
     yellow "Do you want to deploy for root user as well? (y/N): " bold
     local _input
-    read -r _input
+    read -r _input </dev/tty
 
     if [ -n "${_input}" ] && grep -qiE "y|yes" <<<"${_input,,}"; then
         sudo \
