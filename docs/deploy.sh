@@ -24,15 +24,11 @@
 # commands as canonical path
 readonly CMD_GREP=$(which grep)
 readonly CMD_LN=$(which ln)
-readonly CMD_MKDIR=$(which mkdir)
-readonly CMD_READLINK=$(which readlink)
-readonly CMD_TAR=$(which tar)
+readonly CMD_TOUCH=$(which touch)
+
 
 # constants
-readonly DOTFILES_REPO_URL=https://github.com/yatanokarasu/dotfiles.git
-readonly DOTFILES_DIR=$(${CMD_READLINK} -f "${DOT_DIR:-${HOME}/.dotfiles}")
-readonly DOTFILES_ARCHIVE_URL=https://github.com/yatanokarasu/dotfiles/archive/master.tar.gz
-
+#readonly DOTFILES_DIR=$(${CMD_READLINK} -f "${DOT_DIR:-${HOME}/.dotfiles}")
 readonly SNIPPET_TITLE="THIS MUST BE AT THE END OF THE FILE FOR DOTFILES TO WORK!!!"
 readonly BASH_SNIPPET="
 ### ============================================================================
@@ -48,6 +44,7 @@ done
 # Enable powerline
 source \${DOTFILES_DIR}/src/bash/.bash_powerline.sh
 ### ============================================================================"
+
 
 # colors
 declare -A COLORS=(
@@ -71,17 +68,6 @@ declare -A COLORS=(
     [bold_cyan]="\e[1;36m"
     [bold_white]="\e[1;37m"
 )
-
-
-print_logo() {
-    echo ''
-    echo ' _____     ______     ______   ______   __     __         ______     ______     '
-    echo '/\  __-.  /\  __ \   /\__  _\ /\  ___\ /\ \   /\ \       /\  ___\   /\  ___\    '
-    echo '\ \ \/\ \ \ \ \/\ \  \/_/\ \/ \ \  __\ \ \ \  \ \ \____  \ \  __\   \ \___  \   '
-    echo ' \ \____-  \ \_____\    \ \_\  \ \_\    \ \_\  \ \_____\  \ \_____\  \/\_____\  '
-    echo '  \/____/   \/_____/     \/_/   \/_/     \/_/   \/_____/   \/_____/   \/_____/  '
-    echo ''
-}
 
 
 color() {
@@ -153,85 +139,11 @@ check_ng() {
 }
 
 
-die() {
-    log_error "${1}" 1>&2
-    exit "${2:-1}"
-}
-
-
-can_use() {
-    fetch_command=${fetch_command:-$(which "${1}")}
-
-    return $?
-}
-
-
-look_for() {
-    white " ➜ ${1}..."
-
-    if can_use "${1}"; then
-        check_ok
-    else
-        check_ng
-    fi
-
-    echo
-}
-
-
-check_prerequisite() {
-    log_header "Looking for commands..."
-
-    look_for git
-    look_for curl
-    look_for wget
-
-    if [ -z "${fetch_command}" ]; then
-        die "Either git, curl or wget is required."
-    fi
-
-    green "Use ${fetch_command} "; white "(Priority: git > curl > wget)"; echo; echo
-}
-
-
-fetch_via_git() {
-    log_header "Downloading dotfiles..."
-
-    if [ -d "${DOTFILES_DIR}" ]; then
-        (
-            cd "${DOTFILES_DIR}"  || die "Unexpected errors occured."
-            ${fetch_command} pull || die "Please fix error and try again."
-        )
-    else
-        ${fetch_command} clone "${DOTFILES_REPO_URL}" "${DOTFILES_DIR}"
-    fi
-
-    echo
-}
-
-
-fetch_dotfiles() {
-    case "${fetch_command##*/}" in
-    "git")
-        fetch_via_git
-        return 0;;
-    "curl")
-        fetch_command="${fetch_command} -k#SfL ${HTTP_PROXY:+-x "${HTTP_PROXY}" }-o-";;
-    "wget")
-        fetch_command="${fetch_command} -qO-";;
-    esac
-
-    ${CMD_MKDIR} -p "${DOTFILES_DIR}"
-    ${fetch_command} "${DOTFILES_ARCHIVE_URL}" \
-        | ${CMD_TAR} zxf - -C "${DOTFILES_DIR}" --strip-components 1
-}
-
-
 append_bash_resources() {
     local _resource_file=${HOME}/.bashrc
 
-    white "Attempt update of \${HOME}/.bashrc... "
-    touch "${_resource_file}"
+    white "Attempt update of ${HOME}/.bashrc... "
+    ${CMD_TOUCH} "${_resource_file}"
 
     if ${CMD_GREP} -q "${SNIPPET_TITLE}" "${_resource_file}" 2>&1; then
         cyan "💨 Skipped (Already updated)"
@@ -239,7 +151,7 @@ append_bash_resources() {
         # shellcheck disable=SC2015
         echo "${BASH_SNIPPET}" >>"${_resource_file}" \
             && check_ok \
-            || { check_ng; red " (Update \${HOME}/.bashrc failed)"; }
+            || { check_ng; red " (Update ${HOME}/.bashrc failed)"; }
     fi
 
     echo
@@ -253,7 +165,7 @@ symlink_other_dotfiles() {
         log_info "Create symbolic link for ${_tool##*/}..."
 
         for _dot in "${_tool}"/.??*; do
-            white " ➜ \${HOME}/${_dot##*/}... "
+            white " ➜ ${HOME}/${_dot##*/}... "
 
             # shellcheck disable=SC2015
             ${CMD_LN} -sf "${_dot}" "${HOME}"/ \
@@ -269,7 +181,7 @@ symlink_other_dotfiles() {
 
 
 deploy_dotfiles() {
-    log_header  "Deploying dotfiles..."
+    log_header  "Deploying dotfiles for $(whoami)..."
 
     # deploy bash resources
     append_bash_resources
@@ -277,68 +189,3 @@ deploy_dotfiles() {
     # deploy other resources
     symlink_other_dotfiles
 }
-
-
-celebration() {
-    red     "🎉" bold
-    magenta "🎉" bold
-    yellow  "🎉" bold
-    white "  ALL DONE!!!  " bold
-    green   "🎉" bold
-    cyan    "🎉" bold
-    blue    "🎉" bold
-    echo
-    echo
-}
-
-
-last_notice() {
-    echo "Please open a new terminal, or run the following in the existing one:"
-    echo
-    echo "    exec bash"
-    echo
-    white "Enjoy!!!" bold; echo
-}
-
-
-deploy_root_if_want() {
-    local _input
-
-    yellow "Do you want to apply to root as well? (y/N): " bold
-    read -r _input
-
-    if [ -n "${_input}" ] && grep -qiE "y|yes" <<<"${_input,,}"; then
-        sudo
-    fi
-}
-
-
-initlization() {
-    if [ -f "${DOTFILES_DIR}/.initialized" ]; then
-        return
-    fi
-
-    if grep -qsi "Ubuntu" /etc/issue; then
-        bash "${DOTFILES_DIR}/bin/init.sh" && touch "${DOTFILES_DIR}/.initialized"
-    else
-        echo "Initialization can execute on Ubuntu only."
-    fi
-}
-
-
-dotfiles_install() {
-    print_logo
-
-    check_prerequisite &&
-    fetch_dotfiles &&
-    deploy_dotfiles &&
-    celebration
-
-    deploy_root_if_want
-
-    initlization
-
-    last_notice
-}
-
-dotfiles_install

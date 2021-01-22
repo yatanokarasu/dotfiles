@@ -22,8 +22,6 @@
 
 
 # commands as canonical path
-readonly CMD_GREP=$(which grep)
-readonly CMD_LN=$(which ln)
 readonly CMD_MKDIR=$(which mkdir)
 readonly CMD_READLINK=$(which readlink)
 readonly CMD_TAR=$(which tar)
@@ -32,22 +30,6 @@ readonly CMD_TAR=$(which tar)
 readonly DOTFILES_REPO_URL=https://github.com/yatanokarasu/dotfiles.git
 readonly DOTFILES_DIR=$(${CMD_READLINK} -f "${DOT_DIR:-${HOME}/.dotfiles}")
 readonly DOTFILES_ARCHIVE_URL=https://github.com/yatanokarasu/dotfiles/archive/master.tar.gz
-
-readonly SNIPPET_TITLE="THIS MUST BE AT THE END OF THE FILE FOR DOTFILES TO WORK!!!"
-readonly BASH_SNIPPET="
-### ============================================================================
-### ${SNIPPET_TITLE}
-### ============================================================================
-export DOTFILES_DIR=\"${DOTFILES_DIR}\"
-
-# Load parts of bash resources
-for _bash_part in \${DOTFILES_DIR}/src/bash/*.d/*.sh; do
-    source \${_bash_part}
-done
-
-# Enable powerline
-source \${DOTFILES_DIR}/src/bash/.bash_powerline.sh
-### ============================================================================"
 
 # colors
 declare -A COLORS=(
@@ -227,58 +209,6 @@ fetch_dotfiles() {
 }
 
 
-append_bash_resources() {
-    local _resource_file=${HOME}/.bashrc
-
-    white "Attempt update of \${HOME}/.bashrc... "
-    touch "${_resource_file}"
-
-    if ${CMD_GREP} -q "${SNIPPET_TITLE}" "${_resource_file}" 2>&1; then
-        cyan "💨 Skipped (Already updated)"
-    else
-        # shellcheck disable=SC2015
-        echo "${BASH_SNIPPET}" >>"${_resource_file}" \
-            && check_ok \
-            || { check_ng; red " (Update \${HOME}/.bashrc failed)"; }
-    fi
-
-    echo
-}
-
-
-symlink_other_dotfiles() {
-    for _tool in "${DOTFILES_DIR}"/src/*; do
-        test "${_tool##*/}" = bash && continue
-
-        log_info "Create symbolic link for ${_tool##*/}..."
-
-        for _dot in "${_tool}"/.??*; do
-            white " ➜ \${HOME}/${_dot##*/}... "
-
-            # shellcheck disable=SC2015
-            ${CMD_LN} -sf "${_dot}" "${HOME}"/ \
-                && check_ok \
-                || { check_ng; red " (Create symlink failed)"; }
-
-            echo
-        done
-    done
-
-    echo
-}
-
-
-deploy_dotfiles() {
-    log_header  "Deploying dotfiles..."
-
-    # deploy bash resources
-    append_bash_resources
-
-    # deploy other resources
-    symlink_other_dotfiles
-}
-
-
 celebration() {
     red     "🎉" bold
     magenta "🎉" bold
@@ -314,14 +244,43 @@ initlization() {
 }
 
 
+deploy_dotfiles() {
+    # shellcheck disable=SC1090
+    source "${DOTFILES_DIR}/docs/deploy.sh"
+
+    # deploy as current user
+    deploy_dotfiles
+
+    # deploy as root user if you want
+    yellow "Do you want to deploy for root user as well? (y/N): " bold
+    local _input
+    read -r _input
+
+    if [ -n "${_input}" ] && grep -qiE "y|yes" <<<"${_input,,}"; then
+        sudo \
+            --preserve-env=DOTFILES_DIR \
+            bash -c "
+                source \"${DOTFILES_DIR}/docs/deploy.sh\"
+                deploy_dotfiles
+            "
+    else
+        echo
+    fi
+}
+
+
 dotfiles_install() {
     print_logo
 
+    # Download .dotfiles
     check_prerequisite &&
     fetch_dotfiles &&
-    deploy_dotfiles &&
+
+    # Deploy .dotfiles
+    deploy_dotfiles
     celebration
 
+    # Initialization (optionally)
     initlization
 
     last_notice
