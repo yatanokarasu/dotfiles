@@ -775,6 +775,34 @@ function __parse_attributes() {
 }
 
 
+function __fg_color_of() {
+    local _module_name=${1:-newline}
+
+    local _fg_color
+    local _ignored_bg
+    local _ignored_attrs
+
+    # shellcheck disable=SC2034
+    IFS=$";" read -r _fg_color _ignored_bg _ignored_attrs <<<"${__BASH_PL_MODULE_COLORS[${_module_name}]}"
+
+    echo "${_fg_color}"
+}
+
+
+function __bg_color_of() {
+    local _module_name=${1:-newline}
+
+    local _ignored_fg
+    local _bg_color
+    local _ignored_attrs
+
+    # shellcheck disable=SC2034
+    IFS=$";" read -r _ignored_fg _bg_color _ignored_attrs <<<"${__BASH_PL_MODULE_COLORS[${_module_name}]}"
+
+    echo "${_bg_color}"
+}
+
+
 function __update_color_of() {
     local _module_name=${1:-newline}
 
@@ -860,7 +888,7 @@ function __module_cwd() {
             if   [[ ${#_pwd_dirs[@]} -gt 5 ]]; then
                 _tmp_ps1+="${_pwd_dirs[0]} ${__BASH_PL_SYMBOLS[line_separator${__BASH_PL_SYMBOL_DISABLE:+_alt}]//|//} "
                 _tmp_ps1+="${_pwd_dirs[1]} ${__BASH_PL_SYMBOLS[line_separator${__BASH_PL_SYMBOL_DISABLE:+_alt}]//|//} ..."
-                _pwd_dirs=("${_pwd_dirs[@]:${#_pwd_dirs[@]}-3}")
+                _pwd_dirs=("${_pwd_dirs[@]:${#_pwd_dirs[@]}-2}")
             elif [[ ${_pwd_dirs[0]} = "~" ]]; then
                 _tmp_ps1+="~"
                 _pwd_dirs=("${_pwd_dirs[@]:1}")
@@ -1069,7 +1097,24 @@ function __module_host() {
         _dist="win"
     fi
 
-    __append_prompt "${__BASH_PL_SYMBOLS[${_dist,,}${__BASH_PL_SYMBOL_DISABLE:+_alt}]}\h"
+    case "${_dist,,}" in
+    "ubuntu")
+        local _os_logo="${__BASH_PL_FG_COLORS[DarkOrange1]}"
+        ;;
+    "redhat")
+        local _os_logo="${__BASH_PL_FG_COLORS[Red]}"
+        ;;
+    "centos")
+        local _os_logo="${__BASH_PL_FG_COLORS[DarkMagenta]}"
+        ;;
+    "win")
+        local _os_logo="${__BASH_PL_FG_COLORS[SteelBlue1]}"
+        ;;
+    esac
+
+    _os_logo+="${__BASH_PL_SYMBOLS[${_dist,,}${__BASH_PL_SYMBOL_DISABLE:+_alt}]}${__BASH_PL_FG_COLORS[$(__fg_color_of host)]}\h"
+
+    __append_prompt "${_os_logo}"
 }
 
 
