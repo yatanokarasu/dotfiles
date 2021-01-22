@@ -258,6 +258,7 @@ deploy_dotfiles() {
 
     if [ -n "${_input}" ] && grep -qiE "y|yes" <<<"${_input,,}"; then
         sudo \
+            -H \
             --preserve-env=DOTFILES_DIR \
             bash -c "
                 source \"${DOTFILES_DIR}/docs/deploy.sh\"
