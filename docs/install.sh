@@ -142,7 +142,7 @@ die() {
 
 
 can_use() {
-    fetch_command=${fetch_command:-$(which "${1}")}
+    fetch_command=${fetch_command:-$(which "${1}" 2>/dev/null)}
 
     return $?
 }
@@ -185,7 +185,7 @@ fetch_via_git() {
             ${fetch_command} pull || die "Please fix error and try again."
         )
     else
-        ${fetch_command} clone "${DOTFILES_REPO_URL}" "${DOTFILES_DIR}"
+        ${fetch_command} clone "${DOTFILES_REPO_URL}" "${DOTFILES_DIR}" || die "Please fix error and try again."
     fi
 
     echo
@@ -204,7 +204,7 @@ fetch_dotfiles() {
     esac
 
     ${CMD_MKDIR} -p "${DOTFILES_DIR}"
-    ${fetch_command} "${DOTFILES_ARCHIVE_URL}" \
+    ${fetch_command} "${DOTFILES_ARCHIVE_URL}" || die "Failed to fetch dotfiles." \
         | ${CMD_TAR} zxf - -C "${DOTFILES_DIR}" --strip-components 1
 }
 
@@ -249,7 +249,7 @@ deploy_dotfiles() {
     source "${DOTFILES_DIR}/docs/deploy.sh"
 
     # deploy as current user
-    deploy_dotfiles
+    exec_deployment || die "Failed to deploy dotfiles..."
 
     # deploy as root user if you want
     yellow "Do you want to deploy for root user as well? (y/N): " bold
@@ -262,8 +262,8 @@ deploy_dotfiles() {
             --preserve-env=DOTFILES_DIR \
             bash -c "
                 source \"${DOTFILES_DIR}/docs/deploy.sh\"
-                deploy_dotfiles
-            "
+                exec_deployment
+            " || die "Failed to deploy dotfiles..."
     else
         echo
     fi

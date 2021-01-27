@@ -70,6 +70,9 @@ declare -A COLORS=(
 )
 
 
+deploy_result=0
+
+
 color() {
     local _color=${1}
     local _msg=${2}
@@ -140,18 +143,29 @@ check_ng() {
 
 
 append_bash_resources() {
-    local _resource_file=${HOME}/.bashrc
+    if [ -f "${HOME}/.bashrc" ]; then
+        local _resource_file=${HOME}/.bashrc
+    else
+        local _resource_file=${HOME}/.bash_profile
+    fi
 
-    white "Attempt update of ${HOME}/.bashrc... "
+    white "Attempt update of ${_resource_file}... "
     ${CMD_TOUCH} "${_resource_file}"
 
     if ${CMD_GREP} -q "${SNIPPET_TITLE}" "${_resource_file}" 2>&1; then
         cyan "💨 Skipped (Already updated)"
     else
-        # shellcheck disable=SC2015
-        echo "${BASH_SNIPPET}" >>"${_resource_file}" \
+        local _err
+        # shellcheck disable=SC2015,SC2116
+        _err=$(echo "${BASH_SNIPPET}" 2>&1 >>"${_resource_file}" 2>/dev/null) \
             && check_ok \
-            || { check_ng; red " (Update ${HOME}/.bashrc failed)"; }
+            || {
+                deploy_result=$?
+                check_ng;      echo
+                red "${_err}"; echo
+
+                return ${deploy_result}
+            }
     fi
 
     echo
@@ -167,10 +181,17 @@ symlink_other_dotfiles() {
         for _dot in "${_tool}"/.??*; do
             white " ➜ ${HOME}/${_dot##*/}... "
 
+            local _err
             # shellcheck disable=SC2015
-            ${CMD_LN} -sf "${_dot}" "${HOME}"/ \
+            _err=$(${CMD_LN} -sf "${_dot}" "${HOME}"/ 2>&1) \
                 && check_ok \
-                || { check_ng; red " (Create symlink failed)"; }
+                || {
+                    deploy_result=$?
+                    check_ng;      echo
+                    red "${_err}"; echo
+
+                    return ${deploy_result}
+                }
 
             echo
         done
@@ -180,12 +201,12 @@ symlink_other_dotfiles() {
 }
 
 
-deploy_dotfiles() {
+exec_deployment() {
     log_header  "Deploying dotfiles for $(whoami)..."
 
     # deploy bash resources
-    append_bash_resources
+    append_bash_resources || return $?
 
     # deploy other resources
-    symlink_other_dotfiles
+    symlink_other_dotfiles || return $?
 }
