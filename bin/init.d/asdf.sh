@@ -9,6 +9,7 @@ install_prerequisite() {
         build-essential \
         automake \
         autoconf \
+        libarchive-tools \
         libreadline-dev \
         libncurses-dev \
         libssl-dev \
