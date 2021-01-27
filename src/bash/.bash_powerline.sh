@@ -1109,7 +1109,7 @@ function __module_host() {
         local _os_logo="${__BASH_PL_FG_COLORS[Red]}"
         ;;
     "centos")
-        local _os_logo="${__BASH_PL_FG_COLORS[DarkMagenta]}"
+        local _os_logo="${__BASH_PL_FG_COLORS[Magenta3]}"
         ;;
     "win")
         local _os_logo="${__BASH_PL_FG_COLORS[SteelBlue1]}"
