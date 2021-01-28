@@ -729,7 +729,10 @@ function __teardown() {
     __update_color_of
     __flush_line
 
-    PS1+=" "
+    local _separator
+    printf -v _separator "%*s" "$(tput cols)" ""
+
+    PS1="${__BASH_PL_FG_COLORS[Grey35]}${_separator// /-}${PS1} "
 
     unset \
         __return_code__ \
