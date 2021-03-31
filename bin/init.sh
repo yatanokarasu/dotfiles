@@ -18,6 +18,15 @@
 current_filepath=$(dirname "$(readlink -f "$0")")
 setup_tools=()
 
+# deploy as root user if you want
+echo "Do you want to initialization? (y/N): "
+read -r _input </dev/tty
+
+if [ -z "${_input}" ] || grep -qiE "n|no" <<<"${_input,,}"; then
+    exit 2
+fi
+
+
 echo "Would you like to setup ..."
 for _part in "${current_filepath}"/init.d/*.sh; do
     _filename="${_part##*/}"

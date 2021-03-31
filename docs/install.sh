@@ -261,6 +261,7 @@ deploy_dotfiles() {
             -H \
             --preserve-env=DOTFILES_DIR \
             bash -c "
+                export DOTFILES_DIR=\"${DOTFILES_DIR}\"
                 source \"${DOTFILES_DIR}/docs/deploy.sh\"
                 exec_deployment
             " || die "Failed to deploy dotfiles..."
