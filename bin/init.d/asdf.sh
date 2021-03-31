@@ -5,7 +5,7 @@ readonly ASDF_REPO_URL=https://github.com/asdf-vm/asdf.git
 
 install_prerequisite() {
     echo "➜ Installing necessary packages..."
-    sudo apt update \
+    sudo apt update
     sudo apt -y install \
         build-essential \
         automake \
