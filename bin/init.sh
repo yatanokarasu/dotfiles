@@ -19,7 +19,7 @@ current_filepath=$(dirname "$(readlink -f "$0")")
 setup_tools=()
 
 # deploy as root user if you want
-echo "Do you want to initialization? (y/N): "
+echo -n "Do you want to initialization? (y/N): "
 read -r _input </dev/tty
 
 if [ -z "${_input}" ] || grep -qiE "n|no" <<<"${_input,,}"; then
