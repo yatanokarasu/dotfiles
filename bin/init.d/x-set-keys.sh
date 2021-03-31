@@ -19,8 +19,11 @@ pushd "${_x_set_keys_repo}" >/dev/null
 
 echo
 echo "➜ Building x-set-keys..."
+sudo rm -rf /usr/local/bin/x-set-keys
 make
 sudo make install
+popd >/dev/null || exit 255
+
 echo
 echo "➜ Post-installing..."
 sudo chmod u+s /usr/local/bin/x-set-keys
@@ -91,19 +94,66 @@ C-period :: C-End
 C-x C-w :: C-S-s
 __KEYS__
 
-cat <<'__PROFILE__' >>"/etc/profile.d/x-set-keys.sh"
+mkdir -p "${HOME}/.config/systemd/user"
+cat <<'__UNIT__' >"${HOME}/.config/systemd/user/x-set-keys@hw.service"
+[Unit]
+Description=x-set-keys - for HW keyboard
+Documentation=https://github.com/kawao/x-set-keys
 
-if [ -z "${TMUX}" ]; then
-    if [ -f /usr/local/bin/x-set-keys ] && ! pgrep -x x-set-keys >/dev/null; then
-        /usr/local/bin/x-set-keys \
-            --exclude-focus-class="Gnome-terminal" \
-            /etc/x-set-keys.conf >/dev/null 2>&1 &
-    fi
-fi
+After=default.target
 
-__PROFILE__
 
-popd >/dev/null || exit 255
+[Service]
+Type=simple
+
+ExecReload=/bin/kill -HUP $MAINPID
+ExecStart=/usr/local/bin/x-set-keys \
+    --exclude-focus-class="Gnome-terminal" \
+    /etc/x-set-keys.conf
+
+Restart=on-failure
+KillMode=process
+
+
+[Install]
+WantedBy=default.target
+
+__UNIT__
+
+cat <<'__UNIT__' >"${HOME}/.config/systemd/user/x-set-keys@usb.service"
+[Unit]
+Description=x-set-keys - for USB keyboard
+Documentation=https://github.com/kawao/x-set-keys
+
+After=default.target
+
+
+[Service]
+Type=simple
+
+ExecReload=/bin/kill -HUP $MAINPID
+ExecCondition=/bin/ls -1 /dev/input/by-id/usb-*-kbd 2>/dev/null
+ExecStartPre=/bin/sh -c "/bin/systemctl set-environment USB_KBD=$(/bin/ls -1 /dev/input/by-id/usb-*-kbd | head -n 1)"
+ExecStart=/usr/local/bin/x-set-keys \
+    --device-file=${USB_KBD} \
+    --exclude-focus-class="Gnome-terminal" \
+    /etc/x-set-keys.conf
+
+Restart=on-failure
+KillMode=process
+
+
+[Install]
+WantedBy=default.target
+
+__UNIT__
+
+systemctl --user daemon-reload
+systemctl --user enable x-set-keys@hw.service
+systemctl --user enable x-set-keys@usb.service
+systemctl --user start x-set-keys@hw.service
+systemctl --user start x-set-keys@usb.service
+
 
 echo
 echo "🎉 x-set-keys installation is complete!!"
