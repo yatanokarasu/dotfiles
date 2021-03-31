@@ -204,8 +204,9 @@ fetch_dotfiles() {
     esac
 
     ${CMD_MKDIR} -p "${DOTFILES_DIR}"
-    ${fetch_command} "${DOTFILES_ARCHIVE_URL}" || die "Failed to fetch dotfiles." \
-        | ${CMD_TAR} zxf - -C "${DOTFILES_DIR}" --strip-components 1
+    ${fetch_command} "${DOTFILES_ARCHIVE_URL}" \
+        | ${CMD_TAR} zxf - -C "${DOTFILES_DIR}" --strip-components 1 2>/dev/null \
+            || die "Failed to fetch dotfiles."
 }
 
 
