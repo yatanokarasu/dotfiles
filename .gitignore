@@ -1,2 +1,3 @@
 .initialized
 src/bash/local.d/*.sh
+src/git/local/git*

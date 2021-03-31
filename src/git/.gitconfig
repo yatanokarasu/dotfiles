@@ -18,3 +18,5 @@
     ignore = "!gi() { curl -skL https://www.gitignore.io/api/$@ ;}; gi"
 [commit]
     template = ~/.git_commit_template
+[include]
+    path = ~/.dotfiles/src/git/local/git.local
