@@ -15,6 +15,9 @@ sudo apt install -y \
     xserver-xorg-input-all \
     || { echo "Failed to install necessary packages."; exit 128; }
 
+echo
+echo -n "➜ Adding xrdp user to ssl-cert group... "
+usermod -aG ssl-cert xrdp
 
 echo
 echo -n "➜ Updating /etc/xrdp/xrdp.init... "
@@ -25,14 +28,14 @@ echo -n "➜ Updating /etc/polkit-1/localauthority/50-local.d/xrdp-color-manager
 cat <<'__XRDP__' | sudo tee /etc/polkit-1/localauthority/50-local.d/xrdp-color-manager.pkla >/dev/null
 [Allow Colord all Users]
 Identity=unix-user:*
-Action=org.freedesktop.color-manager.create-device;org.freedesktop.color-manager.create-profile;org.freedesktop.color-manager.delete-device;org.freedesktop.color-manager.delete-profile;org.freedesktop.color-manager.modify-device;org.freedesktop.color-manager.modify-profile
+Action=org.freedesktop.color-manager.*
 ResultAny=no
 ResultInactive=no
 ResultActive=yes
 
 [Allow Wifi Scan]
 Identity=unix-user:*
-Action=org.freedesktop.NetworkManager.wifi.scan;org.freedesktop.NetworkManager.enable-disable-wifi;org.freedesktop.NetworkManager.settings.modify.own;org.freedesktop.NetworkManager.settings.modify.syste>
+Action=org.freedesktop.NetworkManager.*
 ResultAny=yes
 ResultInactive=yes
 ResultActive=yes
