@@ -31,5 +31,13 @@ echo "➜ Building font cache..."
 fc-cache -fv >/dev/null
 
 echo
+echo -n "Do you want to use Cica font on current Gnome Terminal profile? (y/N): "
+read -r _input </dev/tty
+
+if [ -z "${_input}" ] || grep -qiE "y|yes" <<<"${_input}"; then
+    gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$(gsettings get org.gnome.Terminal.ProfilesList default | sed "s,',,g")/" font 'Cica 14'
+fi
+
+echo
 echo "🎉 Cica font installation is complete!!"
 echo
