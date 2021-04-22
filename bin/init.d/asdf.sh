@@ -13,6 +13,7 @@ install_prerequisite() {
         libarchive-tools \
         libreadline-dev \
         libncurses-dev \
+        libncurses5-dev \
         libssl-dev \
         libyaml-dev \
         libxslt1-dev \

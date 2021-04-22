@@ -11,7 +11,7 @@ __BASH_PL_MODULES=(
     newline
     time user host cwd rodir newline
     aws terraform python k8s docker git
-    bgjobs prompt error
+    bgjobs ssh prompt error
 )
 
 declare -A __BASH_PL_MODULE_COLORS=(
@@ -34,6 +34,7 @@ declare -A __BASH_PL_MODULE_COLORS=(
     [prompt]="White;Grey27;Bold"
     [python]="Olive;DodgerBlue1;Bold"
     [rodir]="White;Red3;Bold"
+    [ssh]="White;Grey19;Bold"
     [terraform]="White;SlateBlue1;Bold"
     [time]="Grey74;Grey19;Bold"
     [user]="Green;Grey23;Bold"
@@ -589,6 +590,7 @@ declare -A __BASH_PL_SYMBOLS=(
     [error]=" "            # U+F421
     [locked]=" "           # U+E0A2
     [background]=" "       # U+F110
+    [ssh]=" "              # U+F489
 
     # Env
     [aws]=" "              # U+F270
@@ -641,6 +643,7 @@ declare -A __BASH_PL_SYMBOLS=(
     [error_alt]="ErrorCode:"
     [locked_alt]="ReadOnly"
     [background_alt]="Jobs:"
+    [ssh_alt]="SSH:"
 
     # Env
     [aws_alt]="(AWS)"
@@ -1143,6 +1146,16 @@ function __module_python() {
     [[ -z ${VIRTUAL_ENV} ]] && return 0
 
     __append_prompt "${__BASH_PL_SYMBOLS[python${__BASH_PL_SYMBOL_DISABLE:+_alt}]}${VIRTUAL_ENV##*/}"
+}
+
+
+# --------------
+# SSH module
+# --------------
+function __module_ssh() {
+    [[ -z ${SSH_TTY} ]] && return 0
+
+    __append_prompt "${__BASH_PL_SYMBOLS[ssh${__BASH_PL_SYMBOL_DISABLE:+_alt}]}${SSH_TTY/\/dev\//}"
 }
 
 
